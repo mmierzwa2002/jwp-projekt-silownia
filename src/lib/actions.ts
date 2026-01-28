@@ -170,6 +170,7 @@ export async function createReservation(
 
   revalidatePath("/dashboard");
   revalidatePath("/admin/reservations");
+  revalidatePath("/activities");
 }
 
 export async function deleteReservation(reservationId: string) {

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { createReservation } from "@/lib/actions";
 import Link from "next/link";
+import JoinActivityForm from "@/components/JoinActivityForm";
 
 export default async function PublicActivitiesPage() {
   const client = await clientPromise;
@@ -128,21 +129,12 @@ export default async function PublicActivitiesPage() {
                             Brak miejsc
                           </button>
                         ) : (
-                          <form
-                            action={async () => {
-                              "use server";
-                              await createReservation(
-                                (session.user as any).id,
-                                act._id.toString(),
-                                act.name,
-                                act.date,
-                              );
-                            }}
-                          >
-                            <button className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium transition shadow-lg shadow-blue-900/20">
-                              Zapisz się teraz
-                            </button>
-                          </form>
+                          <JoinActivityForm
+                            userId={(session.user as any).id}
+                            activityId={act._id.toString()}
+                            activityName={act.name}
+                            activityDate={act.date}
+                          />
                         )}
                       </>
                     )}

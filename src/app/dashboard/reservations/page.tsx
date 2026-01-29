@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { deleteReservation } from "@/lib/actions";
 import Link from "next/link";
+import CancelReservationForm from "@/components/CancelReservationForm";
 
 export default async function ReservationsPage() {
   const session = await getServerSession(authOptions);
@@ -76,16 +77,7 @@ export default async function ReservationsPage() {
                       Zakończone
                     </span>
                   ) : (
-                    <form
-                      action={async () => {
-                        "use server";
-                        await deleteReservation(res._id.toString());
-                      }}
-                    >
-                      <button className="text-red-400 hover:text-white hover:bg-red-600 px-4 py-2 rounded transition text-sm border border-red-900 hover:border-red-600">
-                        Odwołaj
-                      </button>
-                    </form>
+                    <CancelReservationForm reservationId={res._id.toString()} />
                   )}
                 </div>
               </div>

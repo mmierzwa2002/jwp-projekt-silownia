@@ -1,15 +1,19 @@
 "use client";
 import { registerUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(formData: FormData) {
+    setError(null);
     const res = await registerUser(formData);
+
     if (res?.error) {
-      alert(res.error);
+      setError(res.error);
     } else {
       router.push("/login");
     }
@@ -21,6 +25,12 @@ export default function RegisterPage() {
         <h1 className="text-4xl font-display text-blue-500 mb-6 text-center tracking-wide">
           Dołącz do nas
         </h1>
+
+        {error && (
+          <div className="bg-red-500/20 text-red-400 p-3 rounded mb-4 text-center text-sm border border-red-500/50">
+            {error}
+          </div>
+        )}
 
         <form action={handleSubmit} className="space-y-4">
           <div>
@@ -47,6 +57,18 @@ export default function RegisterPage() {
             <label className="block text-sm text-gray-400 mb-1">Hasło</label>
             <input
               name="password"
+              type="password"
+              className="w-full p-3 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">
+              Powtórz Hasło
+            </label>
+            <input
+              name="confirmPassword"
               type="password"
               className="w-full p-3 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required

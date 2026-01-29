@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import { createActivity, deleteActivity } from "@/lib/actions";
+import Link from "next/link";
 
 export default async function AdminActivitiesPage() {
   const client = await clientPromise;
@@ -99,11 +100,20 @@ export default async function AdminActivitiesPage() {
                   </p>
                 </div>
 
-                <form action={deleteActivity.bind(null, act._id.toString())}>
-                  <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
-                    Odwołaj
-                  </button>
-                </form>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href={`/admin/activities/${act._id.toString()}`}
+                    className="text-blue-400 hover:text-blue-300 text-sm font-semibold hover:underline"
+                  >
+                    Edytuj
+                  </Link>
+
+                  <form action={deleteActivity.bind(null, act._id.toString())}>
+                    <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
+                      Odwołaj
+                    </button>
+                  </form>
+                </div>
               </div>
             ))}
           </div>

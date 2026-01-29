@@ -41,7 +41,7 @@ export async function registerUser(formData: FormData) {
   return { success: true };
 }
 
-// UŻYTKOWNICY ---
+// --- UŻYTKOWNICY ---
 
 export async function deleteUser(userId: string) {
   const client = await clientPromise;
@@ -100,6 +100,26 @@ export async function deleteMembershipType(id: string) {
     .deleteOne({ _id: new ObjectId(id) });
   revalidatePath("/admin/memberships");
   revalidatePath("/dashboard");
+}
+
+export async function updateMembershipType(formData: FormData) {
+  const id = formData.get("id") as string;
+  const name = formData.get("name") as string;
+  const price = Number(formData.get("price"));
+  const durationMonths = Number(formData.get("durationMonths"));
+
+  const client = await clientPromise;
+  await client
+    .db("gym_full_db")
+    .collection("membership_types")
+    .updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { name, price, durationMonths } },
+    );
+
+  revalidatePath("/admin/memberships");
+  revalidatePath("/dashboard");
+  return { success: true };
 }
 
 // --- AKTYWNE KARNETY (Kupowanie/Usuwanie) ---
@@ -162,6 +182,23 @@ export async function deleteActivity(id: string) {
   revalidatePath("/admin/activities");
   revalidatePath("/admin/reservations");
   revalidatePath("/dashboard");
+}
+
+export async function updateActivity(formData: FormData) {
+  const id = formData.get("id") as string;
+  const name = formData.get("name") as string;
+  const date = formData.get("date") as string;
+  const capacity = Number(formData.get("capacity"));
+
+  const client = await clientPromise;
+  await client
+    .db("gym_full_db")
+    .collection("activities")
+    .updateOne({ _id: new ObjectId(id) }, { $set: { name, date, capacity } });
+
+  revalidatePath("/admin/activities");
+  revalidatePath("/activities");
+  return { success: true };
 }
 
 export async function createReservation(

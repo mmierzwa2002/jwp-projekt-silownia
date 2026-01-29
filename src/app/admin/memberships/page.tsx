@@ -1,3 +1,4 @@
+import Link from "next/link";
 import clientPromise from "@/lib/mongodb";
 import { createMembershipType, deleteMembershipType } from "@/lib/actions";
 
@@ -66,6 +67,7 @@ export default async function AdminMembershipsPage() {
             </button>
           </form>
         </div>
+
         <div className="space-y-4">
           <h2 className="text-xl font-bold text-gray-200">
             Aktywne Oferty ({memberships.length})
@@ -90,11 +92,22 @@ export default async function AdminMembershipsPage() {
                 </p>
               </div>
 
-              <form action={deleteMembershipType.bind(null, m._id.toString())}>
-                <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
-                  Usuń
-                </button>
-              </form>
+              <div className="flex items-center gap-3">
+                <Link
+                  href={`/admin/memberships/${m._id.toString()}`}
+                  className="text-blue-400 hover:text-blue-300 text-sm font-semibold hover:underline"
+                >
+                  Edytuj
+                </Link>
+
+                <form
+                  action={deleteMembershipType.bind(null, m._id.toString())}
+                >
+                  <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
+                    Usuń
+                  </button>
+                </form>
+              </div>
             </div>
           ))}
         </div>

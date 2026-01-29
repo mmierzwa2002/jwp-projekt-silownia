@@ -38,6 +38,7 @@ export async function registerUser(formData: FormData) {
   };
 
   await db.collection("users").insertOne(newUser);
+  revalidatePath("/admin/users");
   return { success: true };
 }
 
@@ -69,7 +70,7 @@ export async function updateUser(formData: FormData) {
         email,
         role,
       },
-    },
+    }
   );
 
   revalidatePath("/admin/users");
@@ -114,7 +115,7 @@ export async function updateMembershipType(formData: FormData) {
     .collection("membership_types")
     .updateOne(
       { _id: new ObjectId(id) },
-      { $set: { name, price, durationMonths } },
+      { $set: { name, price, durationMonths } }
     );
 
   revalidatePath("/admin/memberships");
@@ -128,7 +129,7 @@ export async function buyMembership(
   userId: string,
   typeId: string,
   duration: number,
-  typeName: string,
+  typeName: string
 ) {
   const client = await clientPromise;
   const startDate = new Date();
@@ -205,7 +206,7 @@ export async function createReservation(
   userId: string,
   activityId: string,
   activityName: string,
-  activityDate: string,
+  activityDate: string
 ) {
   const client = await clientPromise;
   const db = client.db(DB_NAME);

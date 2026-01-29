@@ -44,6 +44,7 @@ export default async function AdminMembershipsPage() {
                 <input
                   name="price"
                   type="number"
+                  min="1"
                   placeholder="99"
                   className="w-full p-2 bg-gray-900 border border-gray-600 rounded focus:border-green-500 outline-none"
                   required
@@ -57,6 +58,7 @@ export default async function AdminMembershipsPage() {
                   name="durationMonths"
                   type="number"
                   placeholder="1"
+                  min="1"
                   className="w-full p-2 bg-gray-900 border border-gray-600 rounded focus:border-green-500 outline-none"
                   required
                 />

@@ -1,6 +1,6 @@
-// src/app/admin/users/page.tsx
 import clientPromise from "@/lib/mongodb";
-import { deleteUser } from "@/lib/actions";
+import DeleteUserForm from "@/components/DeleteUserForm";
+import Link from "next/link";
 
 export default async function AdminUsersPage() {
   const client = await clientPromise;
@@ -16,37 +16,47 @@ export default async function AdminUsersPage() {
         Zarządzanie Użytkownikami
       </h1>
 
-      <div className="bg-gray-800 rounded p-4 shadow-lg">
+      <div className="bg-gray-800 rounded p-4 shadow-lg border border-gray-700">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-gray-700 text-gray-400">
               <th className="p-3">Nazwa</th>
               <th className="p-3">Email</th>
               <th className="p-3">Rola</th>
-              <th className="p-3 text-right">Akcja</th>
+              <th className="p-3 text-right">Akcje</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u: any) => (
               <tr
                 key={u._id}
-                className="border-b border-gray-700/50 hover:bg-gray-750"
+                className="border-b border-gray-700/50 hover:bg-gray-750 transition"
               >
-                <td className="p-3">{u.name}</td>
+                <td className="p-3 font-medium">{u.name}</td>
                 <td className="p-3 text-gray-300">{u.email}</td>
                 <td className="p-3">
                   <span
-                    className={`px-2 py-1 rounded text-xs ${u.role === "admin" ? "bg-yellow-900 text-yellow-200" : "bg-blue-900 text-blue-200"}`}
+                    className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${
+                      u.role === "admin"
+                        ? "bg-yellow-900/50 text-yellow-200 border border-yellow-800"
+                        : u.role === "employee"
+                          ? "bg-purple-900/50 text-purple-200 border border-purple-800"
+                          : "bg-blue-900/50 text-blue-200 border border-blue-800"
+                    }`}
                   >
                     {u.role}
                   </span>
                 </td>
                 <td className="p-3 text-right">
-                  <form action={deleteUser.bind(null, u._id.toString())}>
-                    <button className="text-red-400 hover:text-red-300 text-sm font-semibold transition">
-                      Usuń
-                    </button>
-                  </form>
+                  <div className="flex justify-end gap-4 items-center">
+                    <Link
+                      href={`/admin/users/${u._id.toString()}`}
+                      className="text-blue-400 hover:text-blue-300 text-sm font-semibold transition hover:underline"
+                    >
+                      Edytuj
+                    </Link>
+                    <DeleteUserForm userId={u._id.toString()} />
+                  </div>
                 </td>
               </tr>
             ))}

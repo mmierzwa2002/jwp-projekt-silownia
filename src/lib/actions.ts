@@ -52,6 +52,30 @@ export async function deleteUser(userId: string) {
   revalidatePath("/admin/users");
 }
 
+export async function updateUser(formData: FormData) {
+  const id = formData.get("id") as string;
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const role = formData.get("role") as string;
+
+  const client = await clientPromise;
+  const db = client.db("gym_full_db");
+
+  await db.collection("users").updateOne(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        name,
+        email,
+        role,
+      },
+    },
+  );
+
+  revalidatePath("/admin/users");
+  return { success: true };
+}
+
 // --- TYPY KARNETÓW ---
 
 export async function createMembershipType(formData: FormData) {

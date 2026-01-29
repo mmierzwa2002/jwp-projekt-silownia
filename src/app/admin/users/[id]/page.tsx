@@ -7,19 +7,36 @@ import Link from "next/link";
 export default async function EditUserPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
+
   const client = await clientPromise;
+
   const user = await client
     .db("gym_full_db")
     .collection("users")
     .findOne({
-      _id: new ObjectId(params.id),
+      _id: new ObjectId(id),
     });
 
   if (!user) {
-    return <div className="p-8">Użytkownik nie znaleziony</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500 bg-gray-900">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-2">Błąd</h2>
+          <p>Użytkownik o ID: {id} nie został znaleziony.</p>
+          <Link
+            href="/admin/users"
+            className="text-blue-400 hover:underline mt-4 block"
+          >
+            Wróć do listy
+          </Link>
+        </div>
+      </div>
+    );
   }
+
   async function handleUpdate(formData: FormData) {
     "use server";
     await updateUser(formData);
@@ -27,7 +44,7 @@ export default async function EditUserPage({
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto py-10">
       <h1 className="text-3xl font-bold text-blue-400 mb-8 border-b border-gray-700 pb-4">
         Edycja Użytkownika
       </h1>

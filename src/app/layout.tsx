@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import Navbar from "@/components/Navbar";
+import { nunito, changaOne } from "@/app/ui/fonts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl">
-      <body className={inter.className}>
+      <body
+        className={`${nunito.variable} ${changaOne.variable} font-sans antialiased bg-gray-900 text-white`}
+      >
         <AuthProvider>
           <Navbar />
           <main>{children}</main>

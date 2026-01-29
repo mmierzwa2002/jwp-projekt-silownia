@@ -8,18 +8,23 @@ import { User, UserRole } from "@/types";
 const DB_NAME = "gym_full_db";
 
 // ---  AUTH ---
-
 export async function registerUser(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (!name || !email || !password) return { error: "Wypełnij wszystkie pola" };
+  if (!name || !email || !password || !confirmPassword) {
+    return { error: "Wypełnij wszystkie pola" };
+  }
+
+  if (password !== confirmPassword) {
+    return { error: "Hasła nie są identyczne!" };
+  }
 
   const client = await clientPromise;
-  const db = client.db(DB_NAME);
+  const db = client.db("gym_full_db");
 
-  // Sprawdź czy user istnieje
   const existingUser = await db.collection("users").findOne({ email });
   if (existingUser) return { error: "Użytkownik już istnieje" };
 

@@ -15,19 +15,36 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const client = await clientPromise;
-        const user = await client
-          .db("gym_db")
-          .collection<User>("users")
-          .findOne({ email: credentials?.email });
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Brak danych logowania");
+        }
 
-        if (!user) throw new Error("Brak użytkownika");
+        const client = await clientPromise;
+        const db = client.db("gym_full_db");
+
+        const user = await db
+          .collection<User>("users")
+          .findOne({ email: credentials.email });
+
+        if (!user) {
+          console.log(
+            "❌ Logowanie: Nie znaleziono użytkownika o emailu:",
+            credentials.email,
+          );
+          throw new Error("Nie znaleziono użytkownika");
+        }
 
         const isValid = await bcrypt.compare(
-          credentials!.password,
+          credentials.password,
           user.password || "",
         );
-        if (!isValid) throw new Error("Błędne hasło");
+
+        if (!isValid) {
+          console.log("❌ Logowanie: Błędne hasło dla:", credentials.email);
+          throw new Error("Błędne hasło");
+        }
+
+        console.log("✅ Logowanie: Sukces dla:", user.name);
 
         return {
           id: user._id?.toString() || "",
@@ -44,7 +61,10 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }: any) {
-      if (session?.user) (session.user as any).role = token.role;
+      if (session?.user) {
+        (session.user as any).role = token.role;
+        (session.user as any).id = token.sub;
+      }
       return session;
     },
   },

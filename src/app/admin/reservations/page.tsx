@@ -1,9 +1,10 @@
 import clientPromise from "@/lib/mongodb";
-import { deleteReservation } from "@/lib/actions";
+import DeleteReservationForm from "@/components/DeleteReservationForm";
 
 export default async function AdminReservationsPage() {
   const client = await clientPromise;
   const db = client.db("gym_full_db");
+
   const reservations = await db
     .collection("reservations")
     .find({})
@@ -69,16 +70,7 @@ export default async function AdminReservationsPage() {
                     {new Date(res.createdAt).toLocaleDateString()}
                   </td>
                   <td className="p-3 text-right">
-                    <form
-                      action={async () => {
-                        "use server";
-                        await deleteReservation(res._id.toString());
-                      }}
-                    >
-                      <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
-                        Anuluj
-                      </button>
-                    </form>
+                    <DeleteReservationForm id={res._id.toString()} />
                   </td>
                 </tr>
               ))

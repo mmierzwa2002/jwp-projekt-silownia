@@ -1,6 +1,7 @@
 import clientPromise from "@/lib/mongodb";
 import { createActivity, deleteActivity } from "@/lib/actions";
 import Link from "next/link";
+import DeleteActivityForm from "@/components/DeleteActivityForm";
 
 export default async function AdminActivitiesPage() {
   const client = await clientPromise;
@@ -107,12 +108,7 @@ export default async function AdminActivitiesPage() {
                   >
                     Edytuj
                   </Link>
-
-                  <form action={deleteActivity.bind(null, act._id.toString())}>
-                    <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
-                      Odwołaj
-                    </button>
-                  </form>
+                  <DeleteActivityForm id={act._id.toString()} />
                 </div>
               </div>
             ))}

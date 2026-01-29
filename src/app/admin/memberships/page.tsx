@@ -1,10 +1,11 @@
 import Link from "next/link";
 import clientPromise from "@/lib/mongodb";
-import { createMembershipType, deleteMembershipType } from "@/lib/actions";
+import { createMembershipType } from "@/lib/actions";
+import DeleteMembershipForm from "@/components/DeleteMembershipForm";
 
 export default async function AdminMembershipsPage() {
   const client = await clientPromise;
-  // Pobieramy typy karnetów z bazy
+
   const memberships = await client
     .db("gym_full_db")
     .collection("membership_types")
@@ -67,7 +68,6 @@ export default async function AdminMembershipsPage() {
             </button>
           </form>
         </div>
-
         <div className="space-y-4">
           <h2 className="text-xl font-bold text-gray-200">
             Aktywne Oferty ({memberships.length})
@@ -78,7 +78,6 @@ export default async function AdminMembershipsPage() {
               Brak zdefiniowanych karnetów.
             </p>
           )}
-
           {memberships.map((m: any) => (
             <div
               key={m._id}
@@ -99,14 +98,7 @@ export default async function AdminMembershipsPage() {
                 >
                   Edytuj
                 </Link>
-
-                <form
-                  action={deleteMembershipType.bind(null, m._id.toString())}
-                >
-                  <button className="text-red-400 hover:text-red-200 hover:bg-red-900/30 px-3 py-1 rounded transition text-sm border border-red-900">
-                    Usuń
-                  </button>
-                </form>
+                <DeleteMembershipForm id={m._id.toString()} />
               </div>
             </div>
           ))}

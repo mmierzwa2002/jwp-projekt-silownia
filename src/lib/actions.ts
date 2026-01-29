@@ -39,6 +39,7 @@ export async function registerUser(formData: FormData) {
 
   await db.collection("users").insertOne(newUser);
   revalidatePath("/admin/users");
+  revalidatePath("/admin");
   return { success: true };
 }
 
@@ -172,6 +173,7 @@ export async function createActivity(formData: FormData) {
     });
   revalidatePath("/admin/activities");
   revalidatePath("/dashboard");
+  revalidatePath("/admin");
 }
 
 export async function deleteActivity(id: string) {
@@ -237,6 +239,7 @@ export async function createReservation(
 
   revalidatePath("/dashboard");
   revalidatePath("/admin/reservations");
+  revalidatePath("/admin");
   revalidatePath("/activities");
 }
 
@@ -248,4 +251,5 @@ export async function deleteReservation(reservationId: string) {
     .deleteOne({ _id: new ObjectId(reservationId) });
   revalidatePath("/dashboard");
   revalidatePath("/admin/reservations");
+  revalidatePath("/admin");
 }

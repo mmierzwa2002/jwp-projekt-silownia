@@ -58,6 +58,7 @@ export default async function EditMembershipPage({
               type="number"
               name="price"
               defaultValue={membership.price}
+              min="1"
               className="w-full bg-gray-900 border border-gray-600 rounded p-3 text-white focus:border-green-500 outline-none"
               required
             />
@@ -70,6 +71,7 @@ export default async function EditMembershipPage({
               type="number"
               name="durationMonths"
               defaultValue={membership.durationMonths}
+              min="1"
               className="w-full bg-gray-900 border border-gray-600 rounded p-3 text-white focus:border-green-500 outline-none"
               required
             />

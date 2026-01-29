@@ -52,6 +52,7 @@ export async function deleteUser(userId: string) {
   await db.collection("active_memberships").deleteMany({ userId });
   await db.collection("reservations").deleteMany({ userId });
   revalidatePath("/admin/users");
+  revalidatePath("/admin");
 }
 
 export async function updateUser(formData: FormData) {
